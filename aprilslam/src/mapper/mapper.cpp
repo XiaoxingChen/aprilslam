@@ -14,9 +14,9 @@ Mapper::Mapper(double relinearize_thresh, int relinearize_skip)
       params_(ISAM2GaussNewtonParams(), relinearize_thresh, relinearize_skip),
       isam2_(params_),
       tag_noise_(noiseModel::Diagonal::Sigmas(
-          (Vector(6) << Vector3::Constant(0.20), Vector3::Constant(0.1)))),
+          (Vector(6) << Vector3::Constant(0.20), Vector3::Constant(0.1)).finished())),
       small_noise_(noiseModel::Diagonal::Sigmas(
-          (Vector(6) << Vector3::Constant(0.10), Vector3::Constant(0.05)))) {}
+          (Vector(6) << Vector3::Constant(0.10), Vector3::Constant(0.05)).finished())) {}
 
 void Mapper::AddPose(const geometry_msgs::Pose &pose) {
   pose_cnt++;

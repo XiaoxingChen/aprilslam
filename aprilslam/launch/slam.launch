@@ -1,19 +1,27 @@
 <launch>
-
+    <arg name="camera" default="/images"/>
     <!--Detector Node-->
     <include file="$(find aprilslam)/launch/detector.launch">
-        <!-- <arg name="camera" value="/stereo/cam0"/> -->
-        <arg name="camera" value="/images"/>
+        <arg name="camera" value="$(arg camera)"/>
 	<arg name="size" value="0.2"/>
     </include>
 
     <include file="$(find aprilslam)/launch/mapper.launch">
-        <!-- <arg name="camera" value="/stereo/cam0"/> -->
-        <arg name="camera" value="/images"/>
+        <arg name="camera" value="$(arg camera)"/>
     </include>
 
     <node name="rviz" pkg="rviz" type="rviz"
         args="-d $(find aprilslam)/config/apriltag.rviz">
     </node>
+
+    <node pkg="ipcamera_driver" type="ipcamera_driver" name="ipcam" output="screen">
+        <param name="video_url" type="string" value="rtsp://192.168.0.107:8080/h264_ulaw.sdp" />
+        <param name="camera_info_url" type="string" value="file:///home/chenxx/engineering/sensor_calibration_set/huawei_nova_youth/ros_format.yaml" />
+        <param name="frame_id" type="string" value="cam0_link" />
+        <remap from="camera/image" to="$(arg camera)/image_raw" />
+    </node>
+
+     <node name="image_proc" pkg="image_proc" type="image_proc" ns="$(arg camera)"/>
+
 
 </launch>
