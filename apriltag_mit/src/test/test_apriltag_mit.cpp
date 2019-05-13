@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     for (unsigned i = 0; i < detections.size(); ++i) detections[i].draw(image);
     cv::imshow("camera", image);  // display frame
 
-    if (cv::waitKey(10) >= 0) break;
+    cv::waitKey(1);
   }
 
   return 0;

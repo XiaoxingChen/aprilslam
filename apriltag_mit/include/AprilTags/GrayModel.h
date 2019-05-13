@@ -22,6 +22,8 @@ class GrayModel {
 
   float interpolate(float x, float y);
 
+  friend std::ostream& operator << (std::ostream& os, const GrayModel& g);
+
  private:
   void compute();
 
@@ -38,6 +40,16 @@ class GrayModel {
   int nobs;
   bool dirty;  //!< True if we've added an observation and need to recompute v
 };
+
+inline std::ostream& operator << (std::ostream& os, const AprilTags::GrayModel& g)
+{
+    os << "A: " << std::endl << g.A << std::endl;
+    os << "v: " << g.v.transpose() << std::endl;
+    os << "b: " << g.b.transpose() << std::endl;
+    os << "nobs: " << g.nobs << std::endl;
+    os << "dirty: " << g.dirty << std::endl;
+    return os;
+}
 
 }  // namespace AprilTags
 

@@ -24,7 +24,7 @@
 
 #include "AprilTags/TagDetector.h"
 
-//#define DEBUG_APRIL
+// #define DEBUG_APRIL
 
 #ifdef DEBUG_APRIL
 #include <opencv/cv.h>
@@ -41,6 +41,7 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) {
   // OpenCV)
   int width = image.cols;
   int height = image.rows;
+  // cout << "w: " << width << ", h: " << height << endl;
   AprilTags::FloatImage fimOrig(width, height);
   int i = 0;
   for (int y = 0; y < height; y++) {
@@ -172,7 +173,7 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) {
 #ifdef DEBUG_APRIL
   int height_ = fimSeg.getHeight();
   int width_ = fimSeg.getWidth();
-  cv::Mat image(height_, width_, CV_8UC3);
+  cv::Mat image_(height_, width_, CV_8UC3);
   {
     for (int y = 0; y < height_; y++) {
       for (int x = 0; x < width_; x++) {
@@ -186,7 +187,7 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) {
         for (int k = 0; k < 3; k++) {
           v(k) = val;
         }
-        image.at<cv::Vec3b>(y, x) = v;
+        image_.at<cv::Vec3b>(y, x) = v;
       }
     }
   }
@@ -481,6 +482,9 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) {
       }
     }
 
+    // std::cout << "whiteModel: " << whiteModel << std::endl;
+    // std::cout << "blackModel: " << blackModel << std::endl;
+
     bool bad = false;
     unsigned long long tagCode = 0;
     for (int iy = thisTagFamily.dimension - 1; iy >= 0; iy--) {
@@ -498,6 +502,9 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) {
         float threshold =
             (blackModel.interpolate(x, y) + whiteModel.interpolate(x, y)) *
             0.5f;
+        // std::cout << "whiteModel: " << whiteModel << std::endl;
+        // std::cout << "blackModel: " << blackModel << std::endl;
+        // cout << "x,y: " << x << "," << y << ", b: " << blackModel.interpolate(x, y) << ", w: " << whiteModel.interpolate(x, y) <<", threshold: " << threshold << endl;
         float v = fim.get(irx, iry);
         tagCode = tagCode << 1;
         if (v > threshold) tagCode |= 1;
@@ -508,13 +515,14 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) {
                        cv::Scalar(0, 0, 255, 0), 2);
           else
             cv::circle(image, cv::Point2f(irx, iry), 1,
-                       cv::Scalar(0, 255, 0, 0), 2);
+                       cv::Scalar(255, 255, 255, 0), 2);
         }
 #endif
       }
     }
 
     if (!bad) {
+      
       TagDetection thisTagDetection;
       thisTagFamily.decode(thisTagDetection, tagCode);
 

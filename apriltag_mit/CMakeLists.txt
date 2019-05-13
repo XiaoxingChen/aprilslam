@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(apriltag_mit)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -Ofast")
+# set(CMAKE_CXX_FLAGS "-std=c++11 -Ofast")
+set(CMAKE_CXX_FLAGS "-std=c++11")
 
 find_package(catkin REQUIRED COMPONENTS
 )
@@ -28,6 +29,23 @@ add_library(apriltag_mit
   src/Edge.cc src/FloatImage.cc src/GLine2D.cc src/GLineSegment2D.cc src/Gaussian.cc src/GrayModel.cc src/Homography33.cc src/MathUtil.cc src/Quad.cc src/Segment.cc src/TagDetection.cc src/TagDetector.cc src/TagFamily.cc src/UnionFindSimple.cc
 )
 target_link_libraries(apriltag_mit
+  ${Eigen_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  ${catkin_LIBRARIES}
+)
+
+
+add_executable(video_test src/test/test_apriltag_mit.cpp)
+target_link_libraries(video_test
+  apriltag_mit
+  ${Eigen_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  ${catkin_LIBRARIES}
+)
+
+add_executable(image_demo src/test/image_demo.cpp)
+target_link_libraries(image_demo
+  apriltag_mit
   ${Eigen_LIBRARIES}
   ${OpenCV_LIBRARIES}
   ${catkin_LIBRARIES}

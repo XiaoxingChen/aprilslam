@@ -107,6 +107,7 @@ void TagFamily::decode(TagDetection &det, unsigned long long rCode) const {
   det.hammingDistance = bestHamming;
   det.rotation = bestRotation;
   det.good = (det.hammingDistance <= errorRecoveryBits);
+  // printf("rCode: 0x%05llX, best code: 0x%05llX, det.hammingDistance: %d\n", rCode, codes[bestId], det.hammingDistance);
   det.obsCode = rCode;
   det.code = bestCode;
 }

@@ -83,3 +83,4 @@ gen/*
 *.app
 
 *.bag
+/.vscode/

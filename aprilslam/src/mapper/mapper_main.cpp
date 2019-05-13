@@ -9,6 +9,6 @@ int main(int argc, char **argv) {
     ros::spin();
   }
   catch (const std::exception &e) {
-    ROS_ERROR("%s: %s", nh.getNamespace().c_str(), e.what());
+    ROS_ERROR("mapper node error: %s: %s", nh.getNamespace().c_str(), e.what());
   }
 }

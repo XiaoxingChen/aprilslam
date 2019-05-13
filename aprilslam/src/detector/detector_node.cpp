@@ -75,6 +75,7 @@ void DetectorNode::CameraCb(const sensor_msgs::ImageConstPtr &image_msg,
     // Maybe use Ptr?
     Apriltags tags_c_msg;
     tags_c_msg.header = image_msg->header;
+    tags_c_msg.header.frame_id = "tags";
     // Actual processing
     std::for_each(begin(detections), end(detections),
                   [&](const AprilTags::TagDetection &detection) {
