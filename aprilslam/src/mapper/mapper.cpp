@@ -28,6 +28,7 @@ void Mapper::Initialize(const Apriltag &tag_w) {
   ROS_ASSERT_MSG(pose_cnt == 1, "Incorrect initial pose");
   AddLandmark(tag_w, Pose3());
   AddPrior(tag_w.id);
+  ROS_INFO("Initialize done");
   init_ = true;
 }
 
@@ -39,6 +40,7 @@ void Mapper::AddPrior(int landmark_id) {
   ROS_INFO("Add landmark prior on: %d", landmark_id);
   graph_.push_back(
       PriorFactor<Pose3>(Symbol('l', landmark_id), Pose3(), small_noise_));
+
 }
 
 void Mapper::AddLandmark(const Apriltag &tag_c, const Pose3 &pose) {
@@ -68,10 +70,10 @@ void Mapper::AddFactors(const std::vector<Apriltag> &tags_c) {
 }
 
 void Mapper::Optimize(int num_iterations) {
-  isam2_.update(graph_, initial_estimates_);
+    isam2_.update(graph_, initial_estimates_);
   if (num_iterations > 1) {
     for (int i = 1; i < num_iterations; ++i) {
-      isam2_.update();
+        isam2_.update();
     }
   }
 }

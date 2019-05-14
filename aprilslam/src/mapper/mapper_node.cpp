@@ -38,7 +38,17 @@ void MapperNode::TagsCb(const aprilslam::ApriltagsConstPtr& tags_c_msg) {
   if (mapper_.init()) {
     // This will only add new landmarks
     mapper_.AddLandmarks(tags_c_good);
-    mapper_.Optimize();
+
+    try
+    {
+      mapper_.Optimize();
+    }
+    catch (const std::exception &e) 
+    { 
+      // ROS_ERROR("update error: %s",  e.what());
+      ROS_ERROR("Optimize failed!");
+      mapper_.Clear();
+    }
     // Get latest estimates from mapper and put into map
     mapper_.Update(&map_, &pose);
     // Prepare for next iteration
@@ -69,7 +79,7 @@ void MapperNode::TagsCb(const aprilslam::ApriltagsConstPtr& tags_c_msg) {
 
   // Publish visualisation markers
   tag_viz_.PublishApriltagsMarker(map_.tags_w(), frame_id_,
-                                  tags_c_msg->header.stamp);
+                                  tags_c_msg->header.stamp);                            
 }
 
 void MapperNode::CinfoCb(const sensor_msgs::CameraInfoConstPtr& cinfo_msg) {
