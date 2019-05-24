@@ -45,8 +45,8 @@ void MapperNode::TagsCb(const aprilslam::ApriltagsConstPtr& tags_c_msg) {
     }
     catch (const std::exception &e) 
     { 
-      // ROS_ERROR("update error: %s",  e.what());
-      ROS_ERROR("Optimize failed!");
+      // ROS_ERROR("Optimize failed: %s",  e.what());
+      ROS_WARN("Optimize failed: %s");
       mapper_.Clear();
     }
     // Get latest estimates from mapper and put into map
